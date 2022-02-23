@@ -1,3 +1,5 @@
+package StepDefinations;
+
 import Base.TestBase;
 import Pages.DealsScreen;
 import Pages.HomeScreen;

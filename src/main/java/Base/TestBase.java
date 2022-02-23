@@ -1,15 +1,14 @@
 package Base;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Map;
-import java.util.Properties;
 
-import Utils.Utilities;
+import java.util.Properties;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeTest;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.AutomationName;
@@ -21,7 +20,7 @@ public class TestBase {
 	public static AndroidDriver driver;
     static Properties config ;
     static{
-		config= Utilities.readProperties(System.getProperty("user.dir")+"/src/test/resources/Config.properties");
+		config= readProperties(System.getProperty("user.dir")+"/src/test/resources/Config.properties");
 	}
 
 	@BeforeClass
@@ -51,9 +50,16 @@ public class TestBase {
 
 	}
 
-	public static String getReportConfigPath(){
-		String reportConfigPath = config.getProperty("reportConfigPath");
-		if(reportConfigPath!= null) return reportConfigPath;
-		else throw new RuntimeException("Report Config Path not specified in the Configuration.properties file for the Key:reportConfigPath");
+	public static Properties readProperties(String filePath) {
+
+		try (FileInputStream testProperties = new FileInputStream(filePath)) {
+			Properties tempProp = new Properties();
+			tempProp.load(testProperties);
+			System.out.println("Properties file reading done: " + filePath);
+			return tempProp;
+		} catch (IOException e) {
+			System.out.println("Properties file error: " + e.getMessage());
+		}
+		return null;
 	}
 }
